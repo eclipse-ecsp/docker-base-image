@@ -1,32 +1,31 @@
 # Copyright (c) 2023-24 Harman International.
 # SPDX-License-Identifier: Apache-2.0
 
-FROM azul/zulu-openjdk-alpine:17.0.9-17.46.19-jre-headless AS BUILDER
+FROM azul/zulu-openjdk-alpine:17.0.9-17.46.19 AS BUILDER
 LABEL authors="https://accounts.eclipse.org/mailing-list/ecsp-dev"
 
 # Env vars
-ENV CATALINA_HOME /usr/local/tomcat
-ENV PATH $CATALINA_HOME/bin:$PATH
+ENV CATALINA_HOME=/usr/local/tomcat
+ENV PATH=$CATALINA_HOME/bin:$PATH
 RUN mkdir -p "$CATALINA_HOME"
 WORKDIR $CATALINA_HOME
-ENV OPENSSL_DIR /etc/ssl
+ENV OPENSSL_DIR=/etc/ssl
 
 # let "Tomcat Native" live somewhere isolated
-ENV TOMCAT_NATIVE_LIBDIR $CATALINA_HOME/native-jni-lib
-ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$TOMCAT_NATIVE_LIBDIR
+ENV TOMCAT_NATIVE_LIBDIR=$CATALINA_HOME/native-jni-lib
+ENV LD_LIBRARY_PATH={LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$TOMCAT_NATIVE_LIBDIR
 
-ENV TOMCAT_MAJOR 10
-ENV TOMCAT_VERSION 10.1.40
-ENV TOMCAT_TGZ_URL http://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
+ENV TOMCAT_MAJOR=10
+ENV TOMCAT_VERSION=10.1.40
+ENV TOMCAT_TGZ_URL=http://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz
 
 RUN apk add --update file
 #run scrip for tomcat extraction and installation
 RUN set -x \
-	\
 	&& apk add --no-cache --virtual .fetch-deps \
 		ca-certificates \
 		tar \
-		openssl \   
+		openssl \
 	&& wget -O tomcat.tar.gz "$TOMCAT_TGZ_URL" \
 	&& tar -xvf tomcat.tar.gz --strip-components=1 \
 	&& rm bin/*.bat \

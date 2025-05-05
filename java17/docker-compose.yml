@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   ecsp-base-java17:
     build: ./ecsp-base-java17
