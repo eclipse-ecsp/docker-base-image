@@ -26,7 +26,7 @@ Image with
 
 - Alpine OS
 - azul/zulu-openjdk-alpine:17.0.9-17.46.19-jre-headless
-- tomcat 10.1.13 (with APR library)
+- tomcat 10.1.40 (with APR library)
 
 ## Configuration
 
