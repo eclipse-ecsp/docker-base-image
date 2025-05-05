@@ -1,0 +1,50 @@
+name: Java 17 Base Images
+
+on:
+  release:
+    types: [ created ]
+
+jobs:
+    # Extract release version from tag
+  extract_version:
+    runs-on: ubuntu-latest
+    name: Extract release version without v prefix
+    outputs:
+      release_version: ${{ steps.set_version.outputs.release_version }}
+    steps:
+      - id: set_version
+        run: |
+              if [[ "${{ github.event.release.tag_name }}" == v* ]]; then
+                  version=${{ github.event.release.tag_name }}
+                  echo "release_version=${version:1}" >> $GITHUB_ENV
+                  echo "::set-output name=release_version::${version:1}"
+              else
+                  echo "release_version=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+                  echo "::set-output name=release_version::${{ github.event.release.tag_name }}"
+              fi
+
+  # Build & Push Base Java17 Image
+  build_base_java17_image:
+    uses: ./.github/workflows/workflow-docker-build-push.yml@main
+    needs: extract_version
+    name: Build & Push Base Java17 Image
+    with:
+      context_path: ./java17
+      image_name: ecsp-base-java17
+      image_tag: ${{ needs.extract_version.outputs.release_version }}
+    secrets:
+      docker_username: ${{ secrets.DOCKER_USERNAME }}
+      docker_api_token: ${{ secrets.DOCKER_API_TOKEN }}
+
+  # Build & Push Base Java17 Tomcat10 Image
+  build_base_java17_tomcat10_image:
+    uses: ./.github/workflows/workflow-docker-build-push.yml@main
+    needs: extract_version
+    name: Build & Push Base Java17 Tomcat10 Image
+    with:
+      context_path: ./java17
+      image_name: ecsp-base-java17-tomcat10-apr
+      image_tag: ${{ needs.extract_version.outputs.release_version }}
+    secrets:
+      docker_username: ${{ secrets.DOCKER_USERNAME }}
+      docker_api_token: ${{ secrets.DOCKER_API_TOKEN }}
