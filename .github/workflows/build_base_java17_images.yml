@@ -25,7 +25,7 @@ jobs:
 
   # Build & Push Base Java17 Image
   build_base_java17_image:
-    uses: ./.github/workflows/workflow-docker-build-push.yml@main
+    uses: ./.github/workflows/workflow-docker-build-push.yml
     needs: extract_version
     name: Build & Push Base Java17 Image
     with:
@@ -38,7 +38,7 @@ jobs:
 
   # Build & Push Base Java17 Tomcat10 Image
   build_base_java17_tomcat10_image:
-    uses: ./.github/workflows/workflow-docker-build-push.yml@main
+    uses: ./.github/workflows/workflow-docker-build-push.yml
     needs: extract_version
     name: Build & Push Base Java17 Tomcat10 Image
     with:
