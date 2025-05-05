@@ -26,7 +26,7 @@ RUN set -x \
 	&& apk add --no-cache --virtual .fetch-deps \
 		ca-certificates \
 		tar \
-		openssl \   
+		openssl \
 	&& wget -O tomcat.tar.gz "$TOMCAT_TGZ_URL" \
 	&& tar -xvf tomcat.tar.gz --strip-components=1 \
 	&& rm bin/*.bat \
