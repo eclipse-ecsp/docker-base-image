@@ -22,7 +22,6 @@ ENV TOMCAT_TGZ_URL http://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR}/
 RUN apk add --update file
 #run scrip for tomcat extraction and installation
 RUN set -x \
-	\
 	&& apk add --no-cache --virtual .fetch-deps \
 		ca-certificates \
 		tar \
