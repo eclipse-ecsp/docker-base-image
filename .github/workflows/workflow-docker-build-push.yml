@@ -1,0 +1,73 @@
+name: Reusable Docker base image build and push
+
+on:
+  workflow_call:
+    inputs:
+      registry:
+        description: "Container registry"
+        required: false
+        type: string
+        default: "docker.io"
+      namespace:
+        description: "Container registry namespace"
+        required: false
+        default: "eclipseecsp"
+        type: string
+      context_path:
+        description: "Build context"
+        required: true
+        type: string
+      image_name:
+        description: "Docker image name"
+        required: true
+        type: string
+      image_tag:
+        description: "Docker image tag"
+        required: true
+        type: string
+    secrets:
+      docker_username:
+        description: "Docker registry username"
+        required: true
+      docker_api_token:
+        description: "Docker registry API token"
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ inputs.registry }}
+          username: ${{ secrets.docker_username }}
+          password: ${{ secrets.docker_api_token }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ inputs.registry }}/${{ inputs.namespace }}/${{ inputs.image_name }}:${{ inputs.image_name }}
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          file: ${{ inputs.context_path }}/${{ inputs.image_name }}/Dockerfile
+          push: true
+          tags: ${{ inputs.registry }}/${{ inputs.namespace }}/${{ inputs.image_name }}:${{ inputs.image_name }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ inputs.registry }}/${{ inputs.namespace }}/${{ inputs.image_name }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true

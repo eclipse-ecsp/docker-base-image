@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  ecsp-base-java17:
+    build: ./ecsp-base-java17
+    image: ${build_repo}/ecsp-base-java17:${build_version}
+
+  ecsp-api-base-java17-tomcat10-apr:
+    build: ecsp-base-java17-tomcat10-apr
+    image: ${build_repo}/ecsp-api-base-java17-tomcat10-apr:${build_version}
