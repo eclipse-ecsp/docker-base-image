@@ -73,7 +73,7 @@ Follow these steps to build the images:
 4. **Verify the built images**:
 
    ```shell
-   docker images | grep eclipseecsp
+   docker images | grep <service-name>
    ```
 
 ## How to Push
@@ -90,10 +90,6 @@ Push the images to your configured repository:
       ```shell
       docker login
       ```
-    - For private registries, use:
-      ```shell
-        docker login eclipseecsp
-        ```
 2. **Push the images** using Docker Compose:
 
    ```shell
@@ -116,8 +112,6 @@ Push the images to your configured repository:
       ```
     - 
     - Or by visiting your Docker Hub account or private registry.
-       https://hub.docker.com/r/eclipseecsp/ecsp-base-java17
-       https://hub.docker.com/r/eclipseecsp/ecsp-base-java17-tomcat10-apr
 
 ## Open Items
 
