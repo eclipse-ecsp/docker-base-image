@@ -125,5 +125,5 @@ Push the images to your configured repository:
 
 ## Announcements
 
-All updates to this library are documented in [releases](../releases)
-For the available versions, see the [tags on this repository](../tags).
+All updates to this library are documented in [releases](../../releases)
+For the available versions, see the [tags on this repository](../../tags).
