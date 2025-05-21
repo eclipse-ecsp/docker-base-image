@@ -110,7 +110,6 @@ Push the images to your configured repository:
       ```shell
       docker search <your-registry-url>
       ```
-    - 
     - Or by visiting your Docker Hub account or private registry.
 
 ## Open Items
